@@ -29,7 +29,8 @@ class Token:
             req = self._session.prepare_request(requests.Request('GET', self.url))
             logme.debug(f'Retrieving {req.url}')
             try:
-                r = self._session.send(req, allow_redirects=True, timeout=self._timeout)
+                proxies = "http://"+self.config.Proxy_host+":"+str(self.config.Proxy_port)
+                r = self._session.send(req, proxies={"http":proxies,"https":proxies},allow_redirects=True, timeout=self._timeout)
             except requests.exceptions.RequestException as exc:
                 if attempt < self._retries:
                     retrying = ', retrying'
